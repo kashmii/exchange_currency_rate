@@ -1,0 +1,9 @@
+# 必要なファイル
+.env
+node_modules/
+src/app.js
+
+# 開発用ファイル
+memo.md
+res.json
+.vscode/
