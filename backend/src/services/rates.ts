@@ -37,5 +37,6 @@ export async function getConvertedAmount(
   }
 
   const rate = rates[target] / rates[base];
-  return amount * rate;
+  const convertedAmount = amount * rate;
+  return parseFloat(convertedAmount.toFixed(5));
 }

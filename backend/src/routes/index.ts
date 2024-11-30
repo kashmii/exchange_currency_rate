@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getConvertedAmount } from '../services/rates';
+import { isValidDate } from '../utils/dateUtils';
 
 const router = Router();
 
@@ -8,8 +9,12 @@ router.post('/convert', async (req, res: any) => {
   const { base, amount, target, date } = req.body;
   console.log('req.body', req.body);
 
-  if (!base || !amount || !target) {
+  if (!base || !amount || !target || !date) {
     return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  if (isValidDate(date) === false) {
+    return res.status(400).json({ error: 'Invalid date format' });
   }
 
   try {
