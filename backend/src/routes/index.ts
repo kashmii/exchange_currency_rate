@@ -5,7 +5,7 @@ const router = Router();
 
 // request 時には header に Content-Type: application/json を含めること
 router.post('/convert', async (req, res: any) => {
-  const { base, amount, target } = req.body;
+  const { base, amount, target, date } = req.body;
   console.log('req.body', req.body);
 
   if (!base || !amount || !target) {
@@ -13,7 +13,12 @@ router.post('/convert', async (req, res: any) => {
   }
 
   try {
-    const convertedAmount = await getConvertedAmount(base, amount, target);
+    const convertedAmount = await getConvertedAmount(
+      base,
+      amount,
+      target,
+      date
+    );
     res.json({ base, amount, target, convertedAmount });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
