@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getConvertedAmount } from '../services/rates';
-import { isValidDate } from '../utils/dateUtils';
+import { isDateInRange } from '../utils/dateUtils';
 
 const router = Router();
 
@@ -13,8 +13,8 @@ router.post('/convert', async (req, res: any) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  if (isValidDate(date) === false) {
-    return res.status(400).json({ error: 'Invalid date format' });
+  if (isDateInRange(date) === false) {
+    return res.status(400).json({ error: 'Date out of range' });
   }
 
   try {
