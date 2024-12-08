@@ -1,0 +1,16 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app-title {
+  color: #13acb3;
+  margin-bottom: 40px;
+}
+
+.period-notice {
+  color: #888;
+  margin: 20px 0;
+}
