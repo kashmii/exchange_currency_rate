@@ -1,5 +1,5 @@
 import '@/App.css';
-import CurrencyConverter from './components/form';
+import CurrencyConverter from '@/components/form';
 
 function App() {
   const today = new Date();
