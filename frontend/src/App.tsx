@@ -4,10 +4,14 @@ import ExchangeResult from '@/components/result';
 import { useState } from 'react';
 
 function App() {
-  // useState 変数作ってresultで使う
   const [amount, setAmount] = useState<string>('');
   const [baseCurrency, setBaseCurrency] = useState<string>('gbp');
   const [targetCurrency, setTargetCurrency] = useState<string>('jpy');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  // 仮の変数
+  const [resultAmount, setResultAmount] = useState<number | undefined>(
+    undefined
+  );
 
   return (
     <>
@@ -19,10 +23,18 @@ function App() {
         setBaseCurrency={setBaseCurrency}
         targetCurrency={targetCurrency}
         setTargetCurrency={setTargetCurrency}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        setResultAmount={setResultAmount}
       />
 
-      {/* result があれば表示する */}
-      <ExchangeResult />
+      {/* TODO: resultAmount があれば表示するようにする */}
+      <ExchangeResult
+        resultAmount={resultAmount}
+        baseCurrency={baseCurrency}
+        targetCurrency={targetCurrency}
+        exchangeDate={selectedDate}
+      />
     </>
   );
 }

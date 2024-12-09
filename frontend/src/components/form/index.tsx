@@ -32,6 +32,9 @@ type props = {
   setBaseCurrency: (baseCurrency: string) => void;
   targetCurrency: string;
   setTargetCurrency: (targetCurrency: string) => void;
+  selectedDate: string;
+  setSelectedDate: (selectedDate: string) => void;
+  setResultAmount: (resultAmount: number | undefined) => void;
 };
 
 const ExchangeForm: React.FC<props> = ({
@@ -41,6 +44,9 @@ const ExchangeForm: React.FC<props> = ({
   setBaseCurrency,
   targetCurrency,
   setTargetCurrency,
+  selectedDate,
+  setSelectedDate,
+  setResultAmount,
 }) => {
   const handleConvert = () => {
     alert(
@@ -49,8 +55,10 @@ const ExchangeForm: React.FC<props> = ({
     // 実際のコンバージョン処理はここで行う
   };
 
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  const [isOutOfTerm, setIsOutOfterm] = useState<boolean>(false);
+  // 仮の処理
+  setResultAmount(250000);
+
+  const [isOutOfTerm, setIsOutOfTerm] = useState<boolean>(false);
   const today = new Date();
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +68,7 @@ const ExchangeForm: React.FC<props> = ({
   useEffect(() => {
     const today = new Date();
     const selected = new Date(selectedDate);
-    setIsOutOfterm(selected > today || selected < new Date('1999-01-01'));
+    setIsOutOfTerm(selected > today || selected < new Date('1999-01-01'));
   }, [selectedDate]);
 
   const swapCurrencies = () => {
@@ -124,7 +132,6 @@ const ExchangeForm: React.FC<props> = ({
             id="amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
             style={{
               padding: '8px',
               fontSize: '16px',

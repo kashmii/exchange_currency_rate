@@ -1,4 +1,3 @@
-// これのテストも書く
 export const isValidDateFormat = (dateString: string): boolean => {
   const regex = /^\d{4}-\d{2}-\d{2}$/;
   if (!regex.test(dateString)) return false;
