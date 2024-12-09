@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // 通貨データ
 const currencies = [
@@ -25,17 +25,51 @@ const currencies = [
 // currencies オブジェクトのキーを表すリテラル型のユニオン型
 // ユニオン型： リテラル型と組み合わせて限定的な値を許容できる
 
-const CurrencyConverter: React.FC = () => {
-  const [amount, setAmount] = useState<string>('');
-  const [baseCurrency, setBaseCurrency] = useState<string>('gbp');
-  const [targetCurrency, setTargetCurrency] = useState<string>('jpy');
+type props = {
+  amount: string;
+  setAmount: (amount: string) => void;
+  baseCurrency: string;
+  setBaseCurrency: (baseCurrency: string) => void;
+  targetCurrency: string;
+  setTargetCurrency: (targetCurrency: string) => void;
+  selectedDate: string;
+  setSelectedDate: (selectedDate: string) => void;
+  setResultAmount: (resultAmount: number | undefined) => void;
+};
 
+const ExchangeForm: React.FC<props> = ({
+  amount,
+  setAmount,
+  baseCurrency,
+  setBaseCurrency,
+  targetCurrency,
+  setTargetCurrency,
+  selectedDate,
+  setSelectedDate,
+  setResultAmount,
+}) => {
   const handleConvert = () => {
     alert(
       `Converting ${amount} from ${baseCurrency.toUpperCase()} to ${targetCurrency.toUpperCase()}`
     );
     // 実際のコンバージョン処理はここで行う
   };
+
+  // 仮の処理
+  setResultAmount(250000);
+
+  const [isOutOfTerm, setIsOutOfTerm] = useState<boolean>(false);
+  const today = new Date();
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
+
+  useEffect(() => {
+    const today = new Date();
+    const selected = new Date(selectedDate);
+    setIsOutOfTerm(selected > today || selected < new Date('1999-01-01'));
+  }, [selectedDate]);
 
   const swapCurrencies = () => {
     alert('Swapping currencies');
@@ -98,7 +132,6 @@ const CurrencyConverter: React.FC = () => {
             id="amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
             style={{
               padding: '8px',
               fontSize: '16px',
@@ -129,29 +162,37 @@ const CurrencyConverter: React.FC = () => {
               fontSize: '16px',
               marginLeft: '5px',
             }}
+            onChange={handleDateChange}
             required
           />
         </div>
 
         {/* 変換ボタン */}
         <button
+          disabled={isOutOfTerm}
           onClick={handleConvert}
           style={{
             padding: '10px 40px',
             fontSize: '16px',
             fontWeight: 'bold',
-            backgroundColor: '#007bff',
+            backgroundColor: isOutOfTerm ? '#ccc' : '#007bff',
             color: '#fff',
             border: 'none',
             borderRadius: '5px',
-            cursor: 'pointer',
+            cursor: isOutOfTerm ? 'not-allowed' : 'pointer',
           }}
         >
           Convert
         </button>
       </div>
+      <p
+        className="period-notice"
+        style={{ color: isOutOfTerm ? 'red' : '#888' }}
+      >
+        指定可能期間: 1999-01-01 〜 {today.toISOString().slice(0, 10)}
+      </p>
     </>
   );
 };
 
-export default CurrencyConverter;
+export default ExchangeForm;
