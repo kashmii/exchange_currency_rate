@@ -1,16 +1,28 @@
 import '@/App.css';
-import CurrencyConverter from '@/components/form';
+import ExchangeForm from '@/components/form';
+import ExchangeResult from '@/components/result';
+import { useState } from 'react';
 
 function App() {
-  const today = new Date();
+  // useState 変数作ってresultで使う
+  const [amount, setAmount] = useState<string>('');
+  const [baseCurrency, setBaseCurrency] = useState<string>('gbp');
+  const [targetCurrency, setTargetCurrency] = useState<string>('jpy');
+
   return (
     <>
       <h1 className="app-title">過去レート計算ツール</h1>
-      <CurrencyConverter />
-      <p className="period-notice">
-        指定可能期間: 1999-01-01 〜 {today.toISOString().slice(0, 10)}
-      </p>
+      <ExchangeForm
+        amount={amount}
+        setAmount={setAmount}
+        baseCurrency={baseCurrency}
+        setBaseCurrency={setBaseCurrency}
+        targetCurrency={targetCurrency}
+        setTargetCurrency={setTargetCurrency}
+      />
+
       {/* result があれば表示する */}
+      <ExchangeResult />
     </>
   );
 }
