@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ExchangeResultData } from '@/App';
 import React, { useEffect, useState } from 'react';
 
 // 通貨データ
@@ -29,6 +30,7 @@ const URL = 'http://localhost:3001/api/convert';
 // ユニオン型： リテラル型と組み合わせて限定的な値を許容できる
 
 type props = {
+  today: Date;
   sourceAmount: string;
   setSourceAmount: (sourceAmount: string) => void;
   baseCurrency: string;
@@ -38,10 +40,11 @@ type props = {
   selectedDate: string;
   setSelectedDate: (selectedDate: string) => void;
   setResultAmount: (resultAmount: number | undefined) => void;
-  setRequestedAmount: (requestedAmount: number | undefined) => void;
+  setExchangeResult: (exchangeResult: ExchangeResultData) => void;
 };
 
 const ExchangeForm: React.FC<props> = ({
+  today,
   sourceAmount,
   setSourceAmount,
   baseCurrency,
@@ -51,7 +54,7 @@ const ExchangeForm: React.FC<props> = ({
   selectedDate,
   setSelectedDate,
   setResultAmount,
-  setRequestedAmount,
+  setExchangeResult,
 }) => {
   const handleConvert = async () => {
     try {
@@ -62,15 +65,22 @@ const ExchangeForm: React.FC<props> = ({
         date: selectedDate,
       });
 
+      const { base, amount, target, convertedAmount } = response.data;
+
       setResultAmount(response.data.convertedAmount);
-      setRequestedAmount(response.data.amount);
+      setExchangeResult({
+        requestedAmount: amount,
+        resultAmount: convertedAmount,
+        base,
+        target,
+        exchangeDate: selectedDate,
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
   const [isOutOfTerm, setIsOutOfTerm] = useState<boolean>(false);
-  const today = new Date();
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
@@ -79,7 +89,7 @@ const ExchangeForm: React.FC<props> = ({
   useEffect(() => {
     const selected = new Date(selectedDate);
     setIsOutOfTerm(selected > today || selected < new Date('1999-01-01'));
-  }, [selectedDate]);
+  }, [selectedDate, today]);
 
   const swapCurrencies = () => {
     alert('Swapping currencies');

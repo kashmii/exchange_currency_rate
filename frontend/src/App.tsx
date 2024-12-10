@@ -3,6 +3,14 @@ import ExchangeForm from '@/components/form';
 import ExchangeResult from '@/components/result';
 import { useState } from 'react';
 
+export type ExchangeResultData = {
+  requestedAmount: number;
+  resultAmount: number;
+  base: string;
+  target: string;
+  exchangeDate: string;
+};
+
 function App() {
   const today = new Date();
   const initialDate = today.toISOString().slice(0, 10);
@@ -12,12 +20,17 @@ function App() {
   const [targetCurrency, setTargetCurrency] = useState<string>('USD');
   const [selectedDate, setSelectedDate] = useState<string>(initialDate);
   const [resultAmount, setResultAmount] = useState<number | undefined>();
-  const [requestedAmount, setRequestedAmount] = useState<number | undefined>();
+
+  const [exchangeResult, setExchangeResult] = useState<
+    ExchangeResultData | undefined
+  >();
 
   return (
     <>
       <h1 className="app-title">過去レート計算ツール</h1>
+
       <ExchangeForm
+        today={today}
         sourceAmount={sourceAmount}
         setSourceAmount={setSourceAmount}
         baseCurrency={baseCurrency}
@@ -27,18 +40,10 @@ function App() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setResultAmount={setResultAmount}
-        setRequestedAmount={setRequestedAmount}
+        setExchangeResult={setExchangeResult}
       />
 
-      {resultAmount && (
-        <ExchangeResult
-          requestedAmount={requestedAmount}
-          resultAmount={resultAmount}
-          baseCurrency={baseCurrency}
-          targetCurrency={targetCurrency}
-          exchangeDate={selectedDate}
-        />
-      )}
+      {resultAmount && <ExchangeResult {...exchangeResult} />}
     </>
   );
 }

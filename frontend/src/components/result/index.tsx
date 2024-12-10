@@ -4,16 +4,16 @@ import './index.css';
 type props = {
   resultAmount: string;
   requestedAmount: string;
-  baseCurrency: string;
-  targetCurrency: string;
+  base: string;
+  target: string;
   exchangeDate: string;
 };
 
 const ExchangeResult: FC<props> = ({
   requestedAmount,
   resultAmount,
-  baseCurrency,
-  targetCurrency,
+  base,
+  target,
   exchangeDate,
 }) => {
   return (
@@ -21,10 +21,8 @@ const ExchangeResult: FC<props> = ({
       <hr />
       <h3>{exchangeDate + ' '}のレート</h3>
       <div className="result-amount">
-        <span className="base-amount">
-          {requestedAmount + ' ' + baseCurrency} ={' '}
-        </span>
-        {resultAmount.toLocaleString() + ' ' + targetCurrency}
+        <span className="base-amount">{requestedAmount + ' ' + base} = </span>
+        {resultAmount.toLocaleString() + ' ' + target}
       </div>
     </div>
   );
