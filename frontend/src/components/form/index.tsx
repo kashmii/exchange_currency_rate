@@ -38,6 +38,7 @@ type props = {
   selectedDate: string;
   setSelectedDate: (selectedDate: string) => void;
   setResultAmount: (resultAmount: number | undefined) => void;
+  setRequestedAmount: (requestedAmount: number | undefined) => void;
 };
 
 const ExchangeForm: React.FC<props> = ({
@@ -50,6 +51,7 @@ const ExchangeForm: React.FC<props> = ({
   selectedDate,
   setSelectedDate,
   setResultAmount,
+  setRequestedAmount,
 }) => {
   const handleConvert = async () => {
     try {
@@ -61,6 +63,7 @@ const ExchangeForm: React.FC<props> = ({
       });
 
       setResultAmount(response.data.convertedAmount);
+      setRequestedAmount(response.data.amount);
     } catch (error) {
       console.error(error);
     }

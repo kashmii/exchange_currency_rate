@@ -5,16 +5,14 @@ import { useState } from 'react';
 
 function App() {
   const today = new Date();
+  const initialDate = today.toISOString().slice(0, 10);
 
   const [sourceAmount, setSourceAmount] = useState<string>('');
   const [baseCurrency, setBaseCurrency] = useState<string>('JPY');
   const [targetCurrency, setTargetCurrency] = useState<string>('USD');
-  const [selectedDate, setSelectedDate] = useState<string>(
-    today.toISOString().slice(0, 10)
-  );
-  const [resultAmount, setResultAmount] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedDate, setSelectedDate] = useState<string>(initialDate);
+  const [resultAmount, setResultAmount] = useState<number | undefined>();
+  const [requestedAmount, setRequestedAmount] = useState<number | undefined>();
 
   return (
     <>
@@ -29,11 +27,12 @@ function App() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setResultAmount={setResultAmount}
+        setRequestedAmount={setRequestedAmount}
       />
 
       {resultAmount && (
         <ExchangeResult
-          sourceAmount={sourceAmount}
+          requestedAmount={requestedAmount}
           resultAmount={resultAmount}
           baseCurrency={baseCurrency}
           targetCurrency={targetCurrency}
