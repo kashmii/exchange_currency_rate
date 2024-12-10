@@ -1,15 +1,18 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 // 通貨データ
 const currencies = [
-  { label: '円', value: 'jpy' },
-  { label: 'ドル', value: 'usd' },
-  { label: 'ポンド', value: 'gbp' },
-  { label: '中国元', value: 'cny' },
-  { label: 'ユーロ', value: 'eur' },
-  { label: 'ウォン', value: 'krw' },
-  { label: '豪ドル', value: 'aud' },
+  { label: '円', value: 'JPY' },
+  { label: 'ドル', value: 'USD' },
+  { label: 'ポンド', value: 'GBP' },
+  { label: '中国元', value: 'CNY' },
+  { label: 'ユーロ', value: 'EUR' },
+  { label: 'ウォン', value: 'KRW' },
+  { label: '豪ドル', value: 'AUD' },
 ];
+
+const URL = 'http://localhost:3001/api/convert';
 
 // as const とすることでキーも値もリテラル型になる ／ オブジェクトをリテラル型として固定する
 // const currencies = {
@@ -26,8 +29,8 @@ const currencies = [
 // ユニオン型： リテラル型と組み合わせて限定的な値を許容できる
 
 type props = {
-  amount: string;
-  setAmount: (amount: string) => void;
+  sourceAmount: string;
+  setSourceAmount: (sourceAmount: string) => void;
   baseCurrency: string;
   setBaseCurrency: (baseCurrency: string) => void;
   targetCurrency: string;
@@ -38,8 +41,8 @@ type props = {
 };
 
 const ExchangeForm: React.FC<props> = ({
-  amount,
-  setAmount,
+  sourceAmount,
+  setSourceAmount,
   baseCurrency,
   setBaseCurrency,
   targetCurrency,
@@ -48,15 +51,20 @@ const ExchangeForm: React.FC<props> = ({
   setSelectedDate,
   setResultAmount,
 }) => {
-  const handleConvert = () => {
-    alert(
-      `Converting ${amount} from ${baseCurrency.toUpperCase()} to ${targetCurrency.toUpperCase()}`
-    );
-    // 実際のコンバージョン処理はここで行う
-  };
+  const handleConvert = async () => {
+    try {
+      const response = await axios.post(URL, {
+        base: baseCurrency,
+        target: targetCurrency,
+        amount: sourceAmount,
+        date: selectedDate,
+      });
 
-  // 仮の処理
-  setResultAmount(250000);
+      setResultAmount(response.data.convertedAmount);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const [isOutOfTerm, setIsOutOfTerm] = useState<boolean>(false);
   const today = new Date();
@@ -66,7 +74,6 @@ const ExchangeForm: React.FC<props> = ({
   };
 
   useEffect(() => {
-    const today = new Date();
     const selected = new Date(selectedDate);
     setIsOutOfTerm(selected > today || selected < new Date('1999-01-01'));
   }, [selectedDate]);
@@ -130,8 +137,8 @@ const ExchangeForm: React.FC<props> = ({
           <label htmlFor="amount">Amount</label>
           <input
             id="amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            value={sourceAmount}
+            onChange={(e) => setSourceAmount(e.target.value)}
             style={{
               padding: '8px',
               fontSize: '16px',
@@ -151,12 +158,11 @@ const ExchangeForm: React.FC<props> = ({
         }}
       >
         <div>
-          <label htmlFor="date">Choose a date:</label>
+          <label htmlFor="date">Choose a date: </label>
           <input
             type="date"
             id="date"
-            // value={selectedDate}
-            // onChange={handleDateChange}
+            value={selectedDate}
             style={{
               padding: '8px',
               fontSize: '16px',

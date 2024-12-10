@@ -4,11 +4,14 @@ import ExchangeResult from '@/components/result';
 import { useState } from 'react';
 
 function App() {
-  const [amount, setAmount] = useState<string>('');
-  const [baseCurrency, setBaseCurrency] = useState<string>('gbp');
-  const [targetCurrency, setTargetCurrency] = useState<string>('jpy');
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  // 仮の変数
+  const today = new Date();
+
+  const [sourceAmount, setSourceAmount] = useState<string>('');
+  const [baseCurrency, setBaseCurrency] = useState<string>('JPY');
+  const [targetCurrency, setTargetCurrency] = useState<string>('USD');
+  const [selectedDate, setSelectedDate] = useState<string>(
+    today.toISOString().slice(0, 10)
+  );
   const [resultAmount, setResultAmount] = useState<number | undefined>(
     undefined
   );
@@ -17,8 +20,8 @@ function App() {
     <>
       <h1 className="app-title">過去レート計算ツール</h1>
       <ExchangeForm
-        amount={amount}
-        setAmount={setAmount}
+        sourceAmount={sourceAmount}
+        setSourceAmount={setSourceAmount}
         baseCurrency={baseCurrency}
         setBaseCurrency={setBaseCurrency}
         targetCurrency={targetCurrency}
@@ -28,13 +31,15 @@ function App() {
         setResultAmount={setResultAmount}
       />
 
-      {/* TODO: resultAmount があれば表示するようにする */}
-      <ExchangeResult
-        resultAmount={resultAmount}
-        baseCurrency={baseCurrency}
-        targetCurrency={targetCurrency}
-        exchangeDate={selectedDate}
-      />
+      {resultAmount && (
+        <ExchangeResult
+          sourceAmount={sourceAmount}
+          resultAmount={resultAmount}
+          baseCurrency={baseCurrency}
+          targetCurrency={targetCurrency}
+          exchangeDate={selectedDate}
+        />
+      )}
     </>
   );
 }
