@@ -2,29 +2,19 @@ import axios from 'axios';
 import { ExchangeResultData } from '@/App';
 import React, { useEffect, useState } from 'react';
 
-// 通貨データ
-const currencies = [
-  { label: '円', value: 'JPY' },
-  { label: 'ドル', value: 'USD' },
-  { label: 'ポンド', value: 'GBP' },
-  { label: '中国元', value: 'CNY' },
-  { label: 'ユーロ', value: 'EUR' },
-  { label: 'ウォン', value: 'KRW' },
-  { label: '豪ドル', value: 'AUD' },
-];
-
 const URL = 'http://localhost:3001/api/convert';
 
+// 通貨データ
 // as const とすることでキーも値もリテラル型になる ／ オブジェクトをリテラル型として固定する
-// const currencies = {
-//   USD: '米ドル',
-//   JPY: '日本円',
-//   GBP: '英ポンド',
-//   CNY: '中国元',
-//   EUR: 'ユーロ',
-//   KRW: '韓国ウォン',
-//   AUD: '豪ドル',
-// };
+const currencies = {
+  JPY: '日本円',
+  USD: '米ドル',
+  EUR: 'ユーロ',
+  GBP: '英ポンド',
+  CNY: '中国元',
+  AUD: '豪ドル',
+  KRW: '韓国ウォン',
+} as const;
 
 // currencies オブジェクトのキーを表すリテラル型のユニオン型
 // ユニオン型： リテラル型と組み合わせて限定的な値を許容できる
@@ -92,7 +82,8 @@ const ExchangeForm: React.FC<props> = ({
   }, [selectedDate, today]);
 
   const swapCurrencies = () => {
-    alert('Swapping currencies');
+    setBaseCurrency(targetCurrency);
+    setTargetCurrency(baseCurrency);
   };
 
   return (
@@ -111,9 +102,9 @@ const ExchangeForm: React.FC<props> = ({
               marginLeft: '5px',
             }}
           >
-            {currencies.map((currency) => (
-              <option key={currency.value} value={currency.value}>
-                {currency.label} - {currency.value.toUpperCase()}
+            {Object.entries(currencies).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value} - {key}
               </option>
             ))}
           </select>
@@ -137,9 +128,9 @@ const ExchangeForm: React.FC<props> = ({
               marginLeft: '5px',
             }}
           >
-            {currencies.map((currency) => (
-              <option key={currency.value} value={currency.value}>
-                {currency.label} - {currency.value.toUpperCase()}
+            {Object.entries(currencies).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value} - {key}
               </option>
             ))}
           </select>
