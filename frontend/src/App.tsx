@@ -3,22 +3,36 @@ import ExchangeForm from '@/components/form';
 import ExchangeResult from '@/components/result';
 import { useState } from 'react';
 
+export type ExchangeResultData = {
+  requestedAmount: number;
+  resultAmount: number;
+  base: string;
+  target: string;
+  exchangeDate: string;
+};
+
 function App() {
-  const [amount, setAmount] = useState<string>('');
-  const [baseCurrency, setBaseCurrency] = useState<string>('gbp');
-  const [targetCurrency, setTargetCurrency] = useState<string>('jpy');
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  // 仮の変数
-  const [resultAmount, setResultAmount] = useState<number | undefined>(
-    undefined
-  );
+  const today = new Date();
+  const initialDate = today.toISOString().slice(0, 10);
+
+  const [sourceAmount, setSourceAmount] = useState<string>('');
+  const [baseCurrency, setBaseCurrency] = useState<string>('JPY');
+  const [targetCurrency, setTargetCurrency] = useState<string>('USD');
+  const [selectedDate, setSelectedDate] = useState<string>(initialDate);
+  const [resultAmount, setResultAmount] = useState<number | undefined>();
+
+  const [exchangeResult, setExchangeResult] = useState<
+    ExchangeResultData | undefined
+  >();
 
   return (
     <>
       <h1 className="app-title">過去レート計算ツール</h1>
+
       <ExchangeForm
-        amount={amount}
-        setAmount={setAmount}
+        today={today}
+        sourceAmount={sourceAmount}
+        setSourceAmount={setSourceAmount}
         baseCurrency={baseCurrency}
         setBaseCurrency={setBaseCurrency}
         targetCurrency={targetCurrency}
@@ -26,15 +40,10 @@ function App() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setResultAmount={setResultAmount}
+        setExchangeResult={setExchangeResult}
       />
 
-      {/* TODO: resultAmount があれば表示するようにする */}
-      <ExchangeResult
-        resultAmount={resultAmount}
-        baseCurrency={baseCurrency}
-        targetCurrency={targetCurrency}
-        exchangeDate={selectedDate}
-      />
+      {resultAmount && <ExchangeResult {...exchangeResult} />}
     </>
   );
 }

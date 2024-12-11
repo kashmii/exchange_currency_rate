@@ -1,7 +1,9 @@
 import express from 'express';
 import Routes from './routes/index';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 const port = 3001;
 
 app.use(express.json());
