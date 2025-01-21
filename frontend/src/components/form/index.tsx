@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ExchangeResultData } from '@/App';
+import s from '@/components/form/index.module.css';
 import React, { useEffect, useState } from 'react';
 
 const URL = 'http://localhost:3001/api/convert';
@@ -88,7 +88,7 @@ const ExchangeForm: React.FC<props> = ({
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <div className={s.currencyRow}>
         {/* 変換元通貨 */}
         <div>
           <label htmlFor="baseCurrency">From</label>
@@ -96,11 +96,7 @@ const ExchangeForm: React.FC<props> = ({
             id="baseCurrency"
             value={baseCurrency}
             onChange={(e) => setBaseCurrency(e.target.value)}
-            style={{
-              padding: '8px',
-              fontSize: '16px',
-              marginLeft: '5px',
-            }}
+            className={s.currencySelect}
           >
             {Object.entries(currencies).map(([key, value]) => (
               <option key={key} value={key}>
@@ -111,8 +107,8 @@ const ExchangeForm: React.FC<props> = ({
         </div>
 
         {/* 両替アイコン（デザインの簡略化） */}
-        <button onClick={swapCurrencies} style={{ margin: '0 10px' }}>
-          <span style={{ fontSize: '20px' }}>↔</span>
+        <button onClick={swapCurrencies} className={s.swapButton}>
+          <span>↔</span>
         </button>
 
         {/* 変換先通貨 */}
@@ -122,11 +118,7 @@ const ExchangeForm: React.FC<props> = ({
             id="targetCurrency"
             value={targetCurrency}
             onChange={(e) => setTargetCurrency(e.target.value)}
-            style={{
-              padding: '8px',
-              fontSize: '16px',
-              marginLeft: '5px',
-            }}
+            className={s.currencySelect}
           >
             {Object.entries(currencies).map(([key, value]) => (
               <option key={key} value={key}>
@@ -143,35 +135,19 @@ const ExchangeForm: React.FC<props> = ({
             id="amount"
             value={sourceAmount}
             onChange={(e) => setSourceAmount(e.target.value)}
-            style={{
-              padding: '8px',
-              fontSize: '16px',
-              width: '100px',
-              marginLeft: '5px',
-            }}
+            className={s.amountInput}
           />
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '10px',
-          marginTop: '20px',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className={s.dayAndButtonRow}>
         <div>
-          <label htmlFor="date">Choose a date: </label>
+          <label htmlFor="date">日付: </label>
           <input
             type="date"
             id="date"
             value={selectedDate}
-            style={{
-              padding: '8px',
-              fontSize: '16px',
-              marginLeft: '5px',
-            }}
+            className={s.dateSelect}
             onChange={handleDateChange}
             required
           />
@@ -181,14 +157,9 @@ const ExchangeForm: React.FC<props> = ({
         <button
           disabled={isOutOfTerm}
           onClick={handleConvert}
+          className={s.convertButton}
           style={{
-            padding: '10px 40px',
-            fontSize: '16px',
-            fontWeight: 'bold',
             backgroundColor: isOutOfTerm ? '#ccc' : '#007bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
             cursor: isOutOfTerm ? 'not-allowed' : 'pointer',
           }}
         >
@@ -199,7 +170,7 @@ const ExchangeForm: React.FC<props> = ({
         className="period-notice"
         style={{ color: isOutOfTerm ? 'red' : '#888' }}
       >
-        指定可能期間: 1999-01-01 〜 {today.toISOString().slice(0, 10)}
+        指定可能期間: 1999-01-01 - {today.toISOString().slice(0, 10)}
       </p>
     </>
   );
