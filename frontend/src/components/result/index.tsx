@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import './index.css';
+import s from '@/components/result/index.module.css';
 
 type props = {
   resultAmount: string;
@@ -17,11 +17,11 @@ const ExchangeResult: FC<props> = ({
   exchangeDate,
 }) => {
   return (
-    <div className="result">
+    <div>
       <hr />
       <h3>{exchangeDate + ' '}のレート</h3>
-      <div className="result-amount">
-        <span className="base-amount">{requestedAmount + ' ' + base} = </span>
+      <div className={s.resultAmount}>
+        <span className={s.baseAmount}>{requestedAmount + ' ' + base} = </span>
         {resultAmount.toLocaleString() + ' ' + target}
       </div>
     </div>

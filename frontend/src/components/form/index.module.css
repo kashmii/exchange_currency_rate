@@ -1,0 +1,48 @@
+.currencyRow {
+  display: flex;
+  gap: 10px;
+  align-items: center
+}
+
+.currencySelect {
+  padding: 8px;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.swapButton {
+  margin: 0 10px;
+
+  span {
+    font-size: 20px;
+  }
+}
+
+.amountInput {
+  padding: 8px;
+  font-size: 16px;
+  width: 100px;
+  margin-left: 5px;
+}
+
+.dayAndButtonRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.dateSelect {
+  padding: 8px;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.convertButton {
+  padding: 10px 40px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
